@@ -631,7 +631,7 @@ function applyState(s) {
   // REST example
   if (apiExampleEl) {
     apiExampleEl.textContent =
-      `Invoke-RestMethod -Method POST -Uri \\\n  "http://127.0.0.1:8000/api/state" \\\n` +
+      `Invoke-RestMethod -Method POST -Uri \\\n  "${location.origin}/api/state" \\\n` +
       `  -ContentType "application/json" \\\n  -Body '${JSON.stringify({
         brakeLights: s.brakeLights, headlights: s.headlights, bodyColor: s.bodyColor,
         engineOn: s.engineOn, driving: s.driving,
