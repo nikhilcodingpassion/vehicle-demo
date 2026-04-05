@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Applied · 3D Vehicle Visualization</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Oxanium:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://cdn.jsdelivr.net/npm/three@0.164.1/build/three.module.js",
+          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.164.1/examples/jsm/"
+        }
+      }
+    </script>
+    <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body data-mode="tracking">
+    <div class="backdrop"></div>
+    <main class="app-shell">
+      <section class="panel intro-panel">
+        <p class="eyebrow">Applied-style Take-Home Prototype</p>
+        <h1>Jarvis-inspired 3D vehicle visualization &amp; live telemetry.</h1>
+        <p class="lede">
+          Orbit the vehicle in full 360&deg;, step inside the cockpit, change its paint,
+          toggle the lighting, and steer the wheels in real time through the UI or the REST API.
+        </p>
+
+        <div class="pill-row">
+          <span class="pill">360&deg; Orbit</span>
+          <span class="pill">Interior View</span>
+          <span class="pill">Live REST Control</span>
+          <span class="pill">PBR + HDR</span>
+          <span class="pill">Chrome Ready</span>
+        </div>
+
+        <div class="status-card">
+          <div>
+            <p class="mini-label">API Connection</p>
+            <p id="api-status" class="status-text">Connecting...</p>
+          </div>
+          <div>
+            <p class="mini-label">Current Mode</p>
+            <p id="hud-mode-label" class="status-text">Tracking</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="stage-panel">
+        <canvas id="scene"></canvas>
+        <div class="hud-overlay">
+          <div class="hud-box top-left">
+            <p class="hud-kicker">Vehicle</p>
+            <h2 id="vehicle-label">Autonomous Concept Vehicle</h2>
+            <p>Sector: Autonomous mobility research</p>
+          </div>
+          <div class="hud-box top-right">
+            <p class="hud-kicker">Telemetry</p>
+            <p id="telemetry-line">Brake lights standby</p>
+            <p id="lighting-line">Headlights offline</p>
+            <p id="dump-line">Steering 50% · Straight</p>
+            <p id="speed-line">Engine off</p>
+            <p id="version-line">State version 0</p>
+          </div>
+          <div class="hud-box bottom-left">
+            <p class="hud-kicker">Camera Presets</p>
+            <div class="button-row">
+              <button data-camera="hero">Hero</button>
+              <button data-camera="side">Side</button>
+              <button data-camera="rear">Rear</button>
+              <button data-camera="interior">Interior</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel controls-panel">
+        <div class="section-header">
+          <p class="eyebrow">Operator Console</p>
+          <h2>Live controls</h2>
+        </div>
+
+        <label class="control-block toggle-block">
+          <span>Brake lights</span>
+          <button id="brake-toggle" class="primary-button">Activate</button>
+        </label>
+
+        <label class="control-block toggle-block">
+          <span>Headlights</span>
+          <button id="headlight-toggle" class="primary-button">Enable</button>
+        </label>
+
+        <label class="control-block">
+          <span>Front wheel steer</span>
+          <div class="range-meta">
+            <span>Axle steering angle</span>
+            <strong id="dump-tilt-value">50%</strong>
+          </div>
+          <input id="dump-tilt" type="range" min="0" max="100" step="1" value="50" />
+        </label>
+
+        <label class="control-block">
+          <span>Body color</span>
+          <input id="color-input" type="color" value="#c0392b" />
+        </label>
+
+        <label class="control-block">
+          <span>HUD mode</span>
+          <select id="hud-mode">
+            <option value="tracking">Tracking</option>
+            <option value="diagnostic">Diagnostic</option>
+            <option value="cinematic">Cinematic</option>
+          </select>
+        </label>
+
+        <label class="control-block toggle-block">
+          <span>Engine</span>
+          <button id="engine-toggle" class="primary-button">Start Engine</button>
+        </label>
+
+        <label class="control-block toggle-block">
+          <span>Race mode</span>
+          <button id="drive-toggle" class="primary-button">Race!</button>
+        </label>
+
+        <label class="control-block toggle-block">
+          <span>Rear spoiler</span>
+          <button id="spoiler-toggle" class="primary-button">Deploy Wing</button>
+        </label>
+
+        <div class="button-pair">
+          <button id="horn-button" class="ghost-button">&#x1F4EF; Honk</button>
+          <button id="nos-button" class="ghost-button nos-btn">&#x26A1; NOS</button>
+        </div>
+
+        <div class="api-card">
+          <p class="eyebrow">REST example</p>
+          <pre id="api-example"></pre>
+          <button id="copy-command" class="ghost-button">Copy PowerShell example</button>
+        </div>
+      </section>
+    </main>
+
+    <!-- Loading overlay shown while GLTF model fetches -->
+    <div id="loading-overlay">
+      <p class="load-label">Loading vehicle model…</p>
+      <div class="load-bar"><div class="load-bar-fill"></div></div>
+    </div>
+
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>
